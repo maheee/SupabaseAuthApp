@@ -1,0 +1,135 @@
+import { createClient } from '@supabase/supabase-js'
+import { ref } from 'vue';
+import validation from './validation';
+
+let supabase = null;
+let ownBaseUrl = null;
+
+const state = ref('LOGIN');
+const errorCode = ref(null);
+const loading = ref(false);
+
+const init = (_supabaseUrl, _anonKey, _ownBaseUrl) => {
+    ownBaseUrl = _ownBaseUrl;
+    supabase = createClient(_supabaseUrl, _anonKey);
+
+    supabase.auth.onAuthStateChange((event, session) => {
+        // console.log(event, session)
+    
+        if (event === 'INITIAL_SESSION') {
+        } else if (event === 'SIGNED_IN') {
+            state.value = 'INSIDE';
+
+        } else if (event === 'SIGNED_OUT') {
+            state.value = 'LOGIN';
+
+        } else if (event === 'PASSWORD_RECOVERY') {
+            state.value = 'PW_RECOVERY';
+
+        } else if (event === 'TOKEN_REFRESHED') {
+        } else if (event === 'USER_UPDATED') {
+            state.value = 'INSIDE';
+        }
+
+        clearError();
+    });
+};
+
+const handleResponse = (error, res = true) => {
+    if (error) {
+        errorCode.value = error.code;
+        loading.value = false;
+        return false;
+    } else {
+        errorCode.value = null;
+        loading.value = false;
+        return res;
+    }
+};
+
+//
+const clearError = async () => {
+    errorCode.value = null;
+};
+
+const signIn = async (email, password) => {
+    loading.value = true;
+
+    const validationError = validation.validateEmail(email) || validation.validatePassword(password);
+    if (validationError) {
+        return handleResponse(validationError);
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim()
+    });
+    return handleResponse(error);
+};
+
+const signOut = async () => {
+    loading.value = true;
+    const { error } = await supabase.auth.signOut();
+    return handleResponse(error);
+};
+
+const resetPassword = async (email) => {
+    loading.value = true;
+
+    const validationError = validation.validateEmail(email);
+    if (validationError) {
+        return handleResponse(validationError);
+    }
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: ownBaseUrl
+    });
+    return handleResponse(error);
+};
+
+const changePassword = async (password1, password2) => {
+    loading.value = true;
+
+    const validationError = validation.validateNewPassword(password1, password2);
+    if (validationError) {
+        return handleResponse(validationError);
+    }
+
+    const { data, error } = await supabase.auth.updateUser({
+        password: password1.trim()
+    });
+    return handleResponse(error);
+};
+
+const signUp = async (email, password1, password2) => {
+    loading.value = true;
+
+    const validationError = validation.validateEmail(email) || validation.validateNewPassword(password1, password2);
+    if (validationError) {
+        return handleResponse(validationError);
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+        email: email.trim(), password: password1.trim(),
+        emailRedirectTo: ownBaseUrl
+    });
+    return handleResponse(error);
+};
+
+//
+export default {
+    //
+    init,
+    signIn,
+    signOut,
+    resetPassword,
+    changePassword,
+    signUp,
+
+    clearError,
+
+    //
+    state,
+    errorCode,
+    loading,
+};

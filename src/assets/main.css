@@ -1,0 +1,187 @@
+@import './base.css';
+@import './normalize.css';
+
+/*
+ * Layout
+ */
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    color: var(--color-text);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-background);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div#app {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+header {
+    text-align: center;
+    text-shadow: 2px 2px var(--color-container-background);
+}
+
+main {
+    width: 300px;
+    flex: 0 0 auto;
+    position: relative;
+
+    background-color: var(--color-container-background);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px 0px rgba(0,0,0,0.50);
+}
+
+footer {
+    text-align: center;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+#spacer {
+    flex: 1 1 auto;
+}
+
+.loading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 20px;
+}
+
+.loading.mask {
+    background-color: var(--color-container-background);
+    opacity: 0.5;
+}
+
+.loading.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+/*
+ * Input Elements
+ */
+.input_element {
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-input-background);
+    padding: 0px 10px 4px 10px;
+
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.input_element label {
+    display: block;
+
+    font-size: 14px;
+}
+
+.input_element input {
+    outline: none !important;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-input-background);
+    width: 100%;
+
+    font-size: 16px;
+}
+
+.input_element input:focus + label {
+    opacity: 0.6;
+}
+
+/*
+ * Input Buttons
+ */
+.input_buttons {
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid black; */
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.input_buttons button {
+    flex: 1 1 auto;
+    outline: none !important;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-primary);
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.input_buttons button.secondary {
+    flex: 1 1 auto;
+    outline: none !important;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-secondary);
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.input_buttons button:hover {
+    background-color: var(--color-container-background);
+}
+
+/*
+ * Links
+ */
+.nav_links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav_links a {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+.nav_links a:hover {
+    color: var(--color-secondary);
+    text-decoration: none;
+}
+
+footer a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+/*
+ * Error Box
+ */
+div.error_box {
+    border: 1px solid var(--color-error);
+    background-color: var(--color-input-background);
+    border-radius: 4px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 20px;
+}
+
+div.error_box h3 {
+    margin-top: 0;
+}

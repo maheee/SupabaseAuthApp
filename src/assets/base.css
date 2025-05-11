@@ -1,0 +1,28 @@
+:root {
+  --color-primary: #83C2B6;
+  --color-secondary: #B3A5D3;
+  --color-success: #C5D3A5;
+  --color-error: #D3A5AE;
+
+  --color-background: #a5d3ca;
+  --color-container-background: #f0f8f6;
+  --color-input-background: #fcfdfd;
+
+  --color-text: #1a352f;
+
+  --color-link: #4a3873;
+
+  --color-border: rgba(60, 60, 60, 0.12);
+  --color-border-hover: rgba(60, 60, 60, 0.29);
+
+  --section-gap: 160px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #181818;
+
+    --color-border: rgba(84, 84, 84, 0.48);
+    --color-border-hover: rgba(84, 84, 84, 0.65);
+  }
+}
