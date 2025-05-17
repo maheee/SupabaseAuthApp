@@ -10,6 +10,7 @@ let cookieDomain = '';
 const state = ref('LOGIN');
 const errorCode = ref(null);
 const loading = ref(false);
+const userInfo = ref(null);
 
 const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) => {
     ownBaseUrl = _ownBaseUrl;
@@ -18,7 +19,17 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
     supabase = createClient(_supabaseUrl, _anonKey);
 
     supabase.auth.onAuthStateChange((event, session) => {
-        console.log(event, session)
+        // console.log(event, session)
+
+        if (session?.user?.id?.length) {
+            userInfo.value = {
+                id: session.user.id,
+                email: session.user.email,
+            };
+        } else {
+            userInfo.value = null;
+        }
+
         if (setCookie) {
             if (session?.access_token?.length && session?.expires_at) {
                 doSetCookie("access_token", session.access_token, session.expires_at * 1000);
@@ -26,9 +37,6 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
                 doSetCookie("access_token", '', 0);
             }
         }
-
-        // TODO check for signs of email validation
-        // TODO password recovery(??)
     
         if (event === 'INITIAL_SESSION') {
         } else if (event === 'SIGNED_IN') {
@@ -153,4 +161,5 @@ export default {
     state,
     errorCode,
     loading,
+    userInfo,
 };

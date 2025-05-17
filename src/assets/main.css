@@ -52,6 +52,15 @@ p {
     line-height: 24px;
 }
 
+dl dt {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+dl dd {
+    margin-left: 12px;
+}
+
 #spacer {
     flex: 1 1 auto;
 }
@@ -93,7 +102,7 @@ p {
 .input_element label {
     display: block;
 
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .input_element input {
