@@ -19,10 +19,21 @@ supaAuth.init(
 
 const selectedOutside = ref('LOGIN');
 const selectedInside = ref('HOME');
+const outsideErrorCode = ref(null);
 
+// read url parameters and store redirect url
 const currentLocation = new URL(location.href);
 let redirectAfterLogin = currentLocation.searchParams.get('redirect_url');
 
+// read hash parameters and check for errors
+if (currentLocation.hash?.length) {
+  const hashParams = new URL('http://l?' + currentLocation.hash.substring(1)).searchParams;
+  if (hashParams.get('error_code')?.length) {
+    outsideErrorCode.value = hashParams.get('error_code')
+  }
+}
+
+// check if redirect requirements are met and redirect
 const runRedirects = () =>{
   if (supaAuth.state.value == 'INSIDE') {
     if (redirectAfterLogin) {
@@ -32,6 +43,7 @@ const runRedirects = () =>{
 };
 runRedirects();
 
+// watch for state changes and set start page
 watch(supaAuth.state, async (oldState, newState) => {
   if (oldState !== newState) {
     selectedOutside.value = 'LOGIN';
@@ -39,6 +51,8 @@ watch(supaAuth.state, async (oldState, newState) => {
   }
   runRedirects();
 });
+
+// helper
 
 const navOutside = target => {
   selectedOutside.value = target;
@@ -48,6 +62,12 @@ const navOutside = target => {
 const navInside = target => {
   selectedInside.value = target;
   supaAuth.clearError();
+};
+
+const clearErrors = () => {
+  outsideErrorCode.value = null;
+  supaAuth.clearError();
+  window.location.hash = '';
 };
 </script>
 
@@ -60,9 +80,9 @@ const navInside = target => {
     <Loading v-if="supaAuth.loading.value" />
 
     <template v-if="supaAuth.state.value == 'LOGIN'">
-      <Login v-if="selectedOutside == 'LOGIN'" />
-      <SignUp v-if="selectedOutside == 'SIGN_UP'" />
-      <ForgotPassword v-if="selectedOutside == 'FORGOT_PW'" />
+      <Login v-if="selectedOutside == 'LOGIN'" @clear="clearErrors()" />
+      <SignUp v-if="selectedOutside == 'SIGN_UP'" @clear="clearErrors()" />
+      <ForgotPassword v-if="selectedOutside == 'FORGOT_PW'" @clear="clearErrors()" />
       <div class="nav_links">
         <a v-if="selectedOutside != 'FORGOT_PW'" href="#" @click="navOutside('FORGOT_PW')">Forgot Password</a>
         <a v-if="selectedOutside != 'LOGIN'" href="#" @click="navOutside('LOGIN')">Login</a>
@@ -72,7 +92,7 @@ const navInside = target => {
 
     <template v-if="supaAuth.state.value == 'INSIDE'">
       <Home v-if="selectedInside == 'HOME'"/>
-      <ChangePassword v-if="selectedInside == 'CHANGE_PW'"/>
+      <ChangePassword v-if="selectedInside == 'CHANGE_PW'" @clear="clearErrors()" />
       <div class="nav_links">
         <a v-if="selectedInside != 'HOME'" href="#" @click="navInside('HOME')">Home</a>
         <a v-if="selectedInside != 'CHANGE_PW'" href="#" @click="navInside('CHANGE_PW')">Change Password</a>
@@ -81,10 +101,10 @@ const navInside = target => {
     </template>
 
     <template v-if="supaAuth.state.value == 'PW_RECOVERY'">
-      <ChangePassword />
+      <ChangePassword @clear="clearErrors()" />
     </template>
 
-    <Error />
+    <Error :error-code="outsideErrorCode" @clear="clearErrors()" />
   </main>
 
   <div id="spacer"></div>

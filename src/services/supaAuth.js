@@ -32,9 +32,9 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
 
         if (setCookie) {
             if (session?.access_token?.length && session?.expires_at) {
-                doSetCookie("access_token", session.access_token, session.expires_at * 1000);
+                doSetCookie('access_token', session.access_token, session.expires_at * 1000);
             } else {
-                doSetCookie("access_token", '', 0);
+                doSetCookie('access_token', '', 0);
             }
         }
     
@@ -60,8 +60,8 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
 const doSetCookie = (cname, cvalue, expiry) => {
     const d = new Date();
     d.setTime(expiry);
-    const expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=" + cookieDomain + ";path=/";
+    const expires = 'expires='+ d.toUTCString();
+    document.cookie = cname + '=' + cvalue + ';' + expires + ';domain=' + cookieDomain + ';path=/';
 }
 
 const handleResponse = (error, res = true) => {

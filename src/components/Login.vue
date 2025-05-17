@@ -2,6 +2,8 @@
 import supaAuth from '../services/supaAuth';
 import { ref } from 'vue';
 
+const emit = defineEmits(['clear']);
+
 const loginName = ref('');
 const loginPassword = ref('');
 
@@ -12,7 +14,7 @@ const onLoginClick = () => {
 const onClearClick = () => {
     loginName.value = '';
     loginPassword.value = '';
-    supaAuth.clearError();
+    emit('clear');
 };
 
 </script>

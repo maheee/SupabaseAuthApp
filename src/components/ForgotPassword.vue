@@ -2,6 +2,8 @@
 import supaAuth from '../services/supaAuth';
 import { ref } from 'vue';
 
+const emit = defineEmits(['clear']);
+
 const resetName = ref('');
 
 const done = ref(false);
@@ -14,7 +16,7 @@ const onResetClick = async () => {
 
 const onClearClick = () => {
     resetName.value = '';
-    supaAuth.clearError();
+    emit('clear');
 };
 
 </script>
