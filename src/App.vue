@@ -48,6 +48,7 @@ watch(supaAuth.state, async (oldState, newState) => {
   if (oldState !== newState) {
     selectedOutside.value = 'LOGIN';
     selectedInside.value = 'HOME';
+    clearErrors();
   }
   runRedirects();
 });
