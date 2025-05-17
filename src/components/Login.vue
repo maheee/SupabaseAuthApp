@@ -20,11 +20,11 @@ const onClearClick = () => {
 <template>
     <h2>Login</h2>
     <div class="input_element">
-        <input type="text" id="login_name" name="login_name" v-model="loginName" />
+        <input type="text" id="login_name" name="login_name" v-model="loginName" v-on:keyup.enter="onLoginClick" />
         <label for="login_name">E-Mail</label>
     </div>
     <div class="input_element">
-        <input type="password" id="login_password" name="login_password" v-model="loginPassword" />
+        <input type="password" id="login_password" name="login_password" v-model="loginPassword" v-on:keyup.enter="onLoginClick" />
         <label for="login_password">Password</label>
     </div>
     <div class="input_buttons">

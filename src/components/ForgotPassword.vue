@@ -22,11 +22,12 @@ const onClearClick = () => {
 <template>
     <h2>Forgot Password</h2>
     <template v-if="done">
-        DONE!
+        <p>If your email address is known, you will be sent an email with instructions to change your password.</p>
+        <br/>
     </template>
     <template v-else>
         <div class="input_element">
-            <input type="text" id="reset_name" name="reset_name" v-model="resetName" />
+            <input type="text" id="reset_name" name="reset_name" v-model="resetName" v-on:keyup.enter="onResetClick" />
             <label for="reset_name">E-Mail</label>
         </div>
         <div class="input_buttons">

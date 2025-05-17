@@ -13,16 +13,31 @@ import supaAuth from './services/supaAuth';
 supaAuth.init(
   config.SUPABASE_URL,
   config.SUPABASE_ANON_KEY,
-  config.OWN_BASE_URL);
+  config.OWN_BASE_URL,
+  config.SET_COOKIE,
+  config.COOKIE_DOMAIN);
 
 const selectedOutside = ref('LOGIN');
 const selectedInside = ref('HOME');
+
+const currentLocation = new URL(location.href);
+let redirectAfterLogin = currentLocation.searchParams.get('redirect_url');
+
+const runRedirects = () =>{
+  if (supaAuth.state.value) {
+    if (redirectAfterLogin) {
+      window.location.href = redirectAfterLogin;
+    }
+  }
+};
+runRedirects();
 
 watch(supaAuth.state, async (oldState, newState) => {
   if (oldState !== newState) {
     selectedOutside.value = 'LOGIN';
     selectedInside.value = 'HOME';
   }
+  runRedirects();
 });
 
 const navOutside = target => {
@@ -49,9 +64,9 @@ const navInside = target => {
       <SignUp v-if="selectedOutside == 'SIGN_UP'" />
       <ForgotPassword v-if="selectedOutside == 'FORGOT_PW'" />
       <div class="nav_links">
+        <a v-if="selectedOutside != 'FORGOT_PW'" href="#" @click="navOutside('FORGOT_PW')">Forgot Password</a>
         <a v-if="selectedOutside != 'LOGIN'" href="#" @click="navOutside('LOGIN')">Login</a>
         <a v-if="selectedOutside != 'SIGN_UP'" href="#" @click="navOutside('SIGN_UP')">Sign Up</a>
-        <a v-if="selectedOutside != 'FORGOT_PW'" href="#" @click="navOutside('FORGOT_PW')">Forgot Password</a>
       </div>
     </template>
 
@@ -59,9 +74,9 @@ const navInside = target => {
       <Home v-if="selectedInside == 'HOME'"/>
       <ChangePassword v-if="selectedInside == 'CHANGE_PW'"/>
       <div class="nav_links">
-        <a href="#" @click="supaAuth.signOut()">Log out</a>
         <a v-if="selectedInside != 'HOME'" href="#" @click="navInside('HOME')">Home</a>
         <a v-if="selectedInside != 'CHANGE_PW'" href="#" @click="navInside('CHANGE_PW')">Change Password</a>
+        <a href="#" @click="supaAuth.signOut()">Log out</a>
       </div>
     </template>
 

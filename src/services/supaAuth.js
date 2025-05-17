@@ -4,17 +4,31 @@ import validation from './validation';
 
 let supabase = null;
 let ownBaseUrl = null;
+let setCookie = false;
+let cookieDomain = '';
 
 const state = ref('LOGIN');
 const errorCode = ref(null);
 const loading = ref(false);
 
-const init = (_supabaseUrl, _anonKey, _ownBaseUrl) => {
+const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) => {
     ownBaseUrl = _ownBaseUrl;
+    setCookie = _setCookie;
+    cookieDomain = _cookieDomain;
     supabase = createClient(_supabaseUrl, _anonKey);
 
     supabase.auth.onAuthStateChange((event, session) => {
-        // console.log(event, session)
+        console.log(event, session)
+        if (setCookie) {
+            if (session?.access_token?.length && session?.expires_at) {
+                doSetCookie("access_token", session.access_token, session.expires_at * 1000);
+            } else {
+                doSetCookie("access_token", '', 0);
+            }
+        }
+
+        // TODO check for signs of email validation
+        // TODO password recovery(??)
     
         if (event === 'INITIAL_SESSION') {
         } else if (event === 'SIGNED_IN') {
@@ -34,6 +48,13 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl) => {
         clearError();
     });
 };
+
+const doSetCookie = (cname, cvalue, expiry) => {
+    const d = new Date();
+    d.setTime(expiry);
+    const expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=" + cookieDomain + ";path=/";
+}
 
 const handleResponse = (error, res = true) => {
     if (error) {

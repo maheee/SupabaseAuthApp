@@ -24,15 +24,16 @@ const onClearClick = () => {
 <template>
     <h2>Change Password</h2>
     <template v-if="done">
-        DONE!
+        <p>Your password has been changed.</p>
+        <br/>
     </template>
     <template v-else>
         <div class="input_element">
-            <input type="password" id="signup_password1" name="signup_password1" v-model="signupPassword1" />
+            <input type="password" id="signup_password1" name="signup_password1" v-model="signupPassword1" v-on:keyup.enter="onChangeClick" />
             <label for="signup_password1">Password</label>
         </div>
         <div class="input_element">
-            <input type="password" id="signup_password2" name="signup_password2" v-model="signupPassword2" />
+            <input type="password" id="signup_password2" name="signup_password2" v-model="signupPassword2" v-on:keyup.enter="onChangeClick" />
             <label for="signup_password2">Password</label>
         </div>
         <div class="input_buttons">
