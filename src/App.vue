@@ -24,7 +24,7 @@ const currentLocation = new URL(location.href);
 let redirectAfterLogin = currentLocation.searchParams.get('redirect_url');
 
 const runRedirects = () =>{
-  if (supaAuth.state.value) {
+  if (supaAuth.state.value == 'INSIDE') {
     if (redirectAfterLogin) {
       window.location.href = redirectAfterLogin;
     }
