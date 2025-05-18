@@ -37,20 +37,24 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
                 doSetCookie('access_token', '', 0);
             }
         }
-    
-        if (event === 'INITIAL_SESSION') {
-        } else if (event === 'SIGNED_IN') {
-            state.value = 'INSIDE';
 
-        } else if (event === 'SIGNED_OUT') {
-            state.value = 'LOGIN';
+        switch (event) {
+            case 'INITIAL_SESSION':
+                break;
 
-        } else if (event === 'PASSWORD_RECOVERY') {
-            state.value = 'PW_RECOVERY';
+            case 'SIGNED_IN':
+            case 'TOKEN_REFRESHED':
+            case 'USER_UPDATED':
+                state.value = 'INSIDE';
+                break;
 
-        } else if (event === 'TOKEN_REFRESHED') {
-        } else if (event === 'USER_UPDATED') {
-            state.value = 'INSIDE';
+            case 'SIGNED_OUT':
+                state.value = 'LOGIN';
+                break;
+
+            case 'PASSWORD_RECOVERY':
+                state.value = 'PW_RECOVERY';
+                break;
         }
 
         clearError();
