@@ -3,9 +3,9 @@
 ## Project Setup
 
 ```sh
-cd src
-cp _config.js config.js
-nano config.js
+cd public
+cp _config.json config.json
+nano config.json
 cd ..
 ```
 
