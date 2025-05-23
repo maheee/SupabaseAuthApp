@@ -1,4 +1,5 @@
-src/config.js
+public/config.json
+public/config_*.json
 
 # Logs
 logs

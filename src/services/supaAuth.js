@@ -17,6 +17,7 @@ const init = (_supabaseUrl, _anonKey, _ownBaseUrl, _setCookie, _cookieDomain) =>
     setCookie = _setCookie;
     cookieDomain = _cookieDomain;
     supabase = createClient(_supabaseUrl, _anonKey);
+    // console.log(supabase);
 
     supabase.auth.onAuthStateChange((event, session) => {
         // console.log(event, session)

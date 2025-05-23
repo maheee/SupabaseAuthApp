@@ -1,0 +1,12 @@
+{
+    "SUPABASE_URL": "https://XXXXXXXXXXX.supabase.co",
+    "SUPABASE_ANON_KEY": "eyXXXXXXXX",
+    "OWN_BASE_URL": "http://mydomain.com/",
+    "TITLE": "myAppName",
+    "IMPRINT_URL": "http://mydomain.com/imprint",
+    "SET_COOKIE": false,
+    "COOKIE_DOMAIN": "",
+    "ENABLE_FORGOT_PASSWORD": true,
+    "ENABLE_CHANGE_PASSWORD": true,
+    "ENABLE_SIGN_UP": true
+}

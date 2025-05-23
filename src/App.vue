@@ -7,8 +7,10 @@ import SignUp from './components/SignUp.vue';
 import ForgotPassword from './components/ForgotPassword.vue';
 import ChangePassword from './components/ChangePassword.vue';
 import Error from './components/Error.vue';
-import config from './config';
+import configProvider from './config';
 import supaAuth from './services/supaAuth';
+
+let config = configProvider.getConfig();
 
 supaAuth.init(
   config.SUPABASE_URL,
@@ -85,9 +87,9 @@ const clearErrors = () => {
       <SignUp v-if="selectedOutside == 'SIGN_UP'" @clear="clearErrors()" />
       <ForgotPassword v-if="selectedOutside == 'FORGOT_PW'" @clear="clearErrors()" />
       <div class="nav_links">
-        <a v-if="selectedOutside != 'FORGOT_PW'" href="#" @click="navOutside('FORGOT_PW')">Forgot Password</a>
+        <a v-if="config.ENABLE_FORGOT_PASSWORD && selectedOutside != 'FORGOT_PW'" href="#" @click="navOutside('FORGOT_PW')">Forgot Password</a>
         <a v-if="selectedOutside != 'LOGIN'" href="#" @click="navOutside('LOGIN')">Login</a>
-        <a v-if="selectedOutside != 'SIGN_UP'" href="#" @click="navOutside('SIGN_UP')">Sign Up</a>
+        <a v-if="config.ENABLE_SIGN_UP && selectedOutside != 'SIGN_UP'" href="#" @click="navOutside('SIGN_UP')">Sign Up</a>
       </div>
     </template>
 
@@ -96,7 +98,7 @@ const clearErrors = () => {
       <ChangePassword v-if="selectedInside == 'CHANGE_PW'" @clear="clearErrors()" />
       <div class="nav_links">
         <a v-if="selectedInside != 'HOME'" href="#" @click="navInside('HOME')">Home</a>
-        <a v-if="selectedInside != 'CHANGE_PW'" href="#" @click="navInside('CHANGE_PW')">Change Password</a>
+        <a v-if="config.ENABLE_CHANGE_PASSWORD && selectedInside != 'CHANGE_PW'" href="#" @click="navInside('CHANGE_PW')">Change Password</a>
         <a href="#" @click="supaAuth.signOut()">Log out</a>
       </div>
     </template>
